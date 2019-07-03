@@ -45,7 +45,7 @@ struct Hash {
     }
 };
 void _swap(char *u, char *v) {
-	char t[10]{};
+	char t[MAX]{};
 	_strcpy(t, u);
 	_strcpy(u, v);
 	_strcpy(v, t);
