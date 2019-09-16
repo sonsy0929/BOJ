@@ -12,6 +12,7 @@ int find(int n){
 void merge(int u, int v){
     u = find(u);
     v = find(v);
+    if (u == v) return;
     uf[v] += uf[u];
     uf[u] = v;
 }
