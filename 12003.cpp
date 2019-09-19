@@ -13,18 +13,18 @@ int main(){
         v.push_back(in);
     }
     sort(v.begin(), v.end());
-    int left[SIZE]{}, right[SIZE]{};
+    int D[SIZE]{}, right[SIZE]{};
     for (int i = 0; i < n; i++){
         auto uit = upper_bound(v.begin() + i, v.end(), v[i]+k);
-        left[i] = uit - (v.begin() + i);
+        D[i] = uit - (v.begin() + i);
     }
     int mx = 0, ans = 0;
     for (int i = n - 1; i >= 0; i--){
-        mx = max(mx, left[i]);
+        mx = max(mx, D[i]);
         right[i] = mx;
     }
     for (int i = 0; i < n; i++){
-        ans = max(ans, left[i] + right[i + left[i]]);
+        ans = max(ans, D[i] + right[i + D[i]]);
     }
     printf("%d\n", ans);
 }
