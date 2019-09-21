@@ -1,60 +1,57 @@
 #include <cstdio>
 using namespace std;
 #define nullptr 0
-const int LISTSIZE = 1e5;
-const int SIZE = 26;
 const int STRSIZE = 81;
+const int SIZE = 1e5;
+const int alphaSize = 26;
 struct Trie{
-    Trie* go[SIZE];
+    Trie* go[alphaSize];
     bool terminal;
-    int cnt;
-    Trie() : terminal(false), cnt(0){
-        for (int i = 0; i < SIZE; i++){
+    int childCnt;
+    int words;
+    Trie() : terminal(false), childCnt(0), words(0) {
+        for (int i = 0; i < alphaSize; i++){
             go[i] = nullptr;
         }
     }
-    ~Trie(){
-        for (int i = 0; i < SIZE; i++){
+    ~Trie() {
+        for (int i = 0; i < alphaSize; i++){
             if (go[i]) delete go[i];
         }
     }
     void insert(char* data){
-        if (*data == '\0'){
+        if (*data == nullptr){
             terminal = true;
+            childCnt++;
             return;
         }
         int next = *data - 'a';
         if (!go[next]){
             go[next] = new Trie();
-            cnt++;
+            childCnt++;
         }
+        words++;
         go[next]->insert(data+1);
     }
-    int getInputCnt(char* data){
+    int buttonClickCnt(bool isRoot = false){
+        int ret = (isRoot || childCnt > 1) ? words : 0;
+        for (int i = 0; i < alphaSize; i++){
+            if (go[i]) ret += go[i]->buttonClickCnt(); 
+        }
+        return ret;
     }
 };
-void strcpy(char *dst, const char *src){
-    int i = 0;
-    for (; src[i]; i++){
-        dst[i] = src[i];
-    }
-    dst[i] = src[i];
-}
-char list[LISTSIZE][STRSIZE];
 char in[STRSIZE];
 int main(){
     int N;
-    while(scanf("%d", &N) != -1){
-        Trie trie;
+    while (scanf("%d", &N) != -1){
+        Trie root;
         for (int i = 0; i < N; i++){
             scanf(" %s", in);
-            trie.insert(in);
-            strcpy(list[i], in);
+            root.insert(in);
         }
-        int ans = 0;
-        for (int i = 0; i < N; i++){
-            ans += trie.getInputCnt(list[i]);
-        }
-        printf("%d\n", ans);
+        int ret = root.buttonClickCnt(true);
+        double ans = (double)ret / (double)N;
+        printf("%.2f\n", ans);
     }
 }
