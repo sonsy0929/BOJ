@@ -2,10 +2,10 @@
 #include <string>
 using namespace std;
 int main(){
-    string s, end = "Was it a cat I saw?";
+    string s;
     for (int i = 2; ; i++){
-        cin >> s;
-        if (s == end) break;
+        getline(cin, s);
+        if (s == "Was it a cat I saw?") break;
         string ret;
         for (int j = 0; j < s.size(); j+=i){
             ret.push_back(s[j]);
