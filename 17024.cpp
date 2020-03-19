@@ -11,14 +11,14 @@ dist 2 : grand_parent ~ child, sibling
 dist가 1인 경우 : parent ~ child의 색이 달라야 하므로)
 따라서 각 정점마다 간선의 개수를 세어 최대값 D를 확인하고,
 D + 1을 해준 것이 답이 된다.
- */
-#include <cstdio>
+*/
 #include <algorithm>
+#include <cstdio>
 using namespace std;
 int N, cnt[100'001];
-int main(){
+int main() {
     scanf("%d", &N);
-    for (int i = 0; i < N - 1; i++){
+    for (int i = 0; i < N - 1; i++) {
         int u, v;
         scanf("%d %d", &u, &v);
         cnt[u]++, cnt[v]++;
