@@ -31,46 +31,39 @@
 #include <bits/stdc++.h>
 #define fastio ios::sync_with_stdio(0), cin.tie(0)
 using namespace std;
+using Robot = tuple<int,int,int>;
 const int roff[] = {-1, 0, 1, 0};
 const int coff[] = {0, 1, 0, -1};
-struct Robot {
-    int r, c, d;
-};
 int R, C, N, M, visited[101][101];
 vector<Robot> robots;
 bool isIn(int r, int c) {
     return r > 0 && r <= R && c > 0 && c <= C;
 }
 bool doCommand(int x, char cmd, int cnt) {
-    Robot next = robots[x];
+    auto& [nr, nc, nd] = robots[x];
     auto [r, c, d] = robots[x];
     if (cmd == 'L') {
         cnt %= 4;
-        while (cnt--) {
-            next.d = (next.d + 3) % 4;
-        }
+        while (cnt--) nd = (nd + 3) % 4;
     } else if (cmd == 'R') {
         cnt %= 4;
-        while (cnt--) {
-            next.d = (next.d + 1) % 4;
-        }
+        while (cnt--) nd = (nd + 1) % 4;
     } else {
         for (int i = 0; i < cnt; i++) {
-            next.r += roff[d];
-            next.c += coff[d];
-            if (!isIn(next.r, next.c)) {
+            nr += roff[d];
+            nc += coff[d];
+            if (!isIn(nr, nc)) {
                 cout << "Robot " << x << " crashes into the wall";
                 return false;
             }
-            if (visited[next.r][next.c]) {
-                cout << "Robot " << x << " crashes into robot " << visited[next.r][next.c];
+            if (visited[nr][nc]) {
+                cout << "Robot " << x << " crashes into robot " << visited[nr][nc];
                 return false;
             }
         }
-        visited[next.r][next.c] = x;
+        visited[nr][nc] = x;
         visited[r][c] = 0;
     }
-    robots[x] = next;
     return true;
 }
 int getDir(char c) {
