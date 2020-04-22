@@ -1,40 +1,34 @@
-#include <cstdio>
-#include <vector>
-#include <algorithm>
+/*
+idea : A + B == -(C + D)
+stl의 hashmap인 unordered_map은 생각보다 많이 느리므로, pbds의 gp_hash_table을 이용하자
+https://codeforces.com/blog/entry/60737
+*/
+
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#define fastio ios::sync_with_stdio(0), cin.tie(0)
 using namespace std;
 using ll = long long;
-int N, top;
-ll A[4000][4];
-ll sum[2][16000000];
-void getSum(int u, int v, int idx){
-    top = 0;
-    for (int i = 0; i < N; i++){
-        for (int j = 0; j < N; j++){
-            sum[idx][top++] = A[i][u] + A[j][v];
+int arr[5000][4];
+int main() {
+    fastio;
+    __gnu_pbds::gp_hash_table<int, int> hash;
+    int n; cin >> n;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < 4; j++) {
+            cin >> arr[i][j];
         }
     }
-}
-ll solve(int u, int v){
-    ll ret = 0;
-    for (int i = 0; i < top; i++){
-        ll val = sum[u][i];
-        auto iter_lo = lower_bound(sum[v], sum[v] + top, -val);
-        auto iter_hi = upper_bound(sum[v], sum[v] + top, -val);
-        if (*iter_lo != -val) continue;
-        ret += iter_hi - iter_lo; 
-    }
-    return ret;
-}
-int main(){
-    scanf("%d", &N);
-    for (int i = 0; i < N; i++){
-        for (int j = 0; j < 4; j++){
-            scanf("%lld", &A[i][j]);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            hash[arr[i][0]+arr[j][1]]++;
         }
     }
-    getSum(0, 1, 0);
-    getSum(2, 3, 1);
-    for (int i = 0; i < 2; i++) sort(sum[i], sum[i] + top);
-    ll ans = solve(0, 1);
-    printf("%lld\n", ans);
+    ll ans = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            ans += hash[-(arr[i][2]+arr[j][3])];
+        }
+    }
+    cout << ans;
 }
